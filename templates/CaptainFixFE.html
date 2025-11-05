@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Captain Fix</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+      width: 400px;
+      text-align: center;
+    }
+    .container h1 {
+      margin-bottom: 10px;
+      font-size: 26px;
+      color: #2a5298;
+    }
+    .container p {
+      margin-bottom: 25px;
+      color: #666;
+      font-size: 14px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #333;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .btn {
+      background: #2a5298;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #1e3c72;
+    }
+  </style>
+</head>
+
+
+
+<body>
+  <div class="container">
+    <h1>Captain Fix</h1>
+    <p>Smart Automated Testing Platform</p>
+    
+    <form>
+      <div class="form-group">
+        <label for="url">Website URL *</label>
+        <input type="url" id="url" placeholder="https://example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address (optional)</label>
+        <input type="email" id="email" placeholder="your@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="tool">Integration Tool</label>
+        <select id="tool">
+          <option>Jira</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="depth">Test Type</label>
+        <select id="depth">
+          <option>5-7 test cases in total</option>
+          <option>10-12 test cases in total</option>
+            <option>15-17 test cases in total</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="browser">Browser</label>
+        <select id="browser">
+          <option>Chrome</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="testPlanReport">Download TestPlan Report</label>
+        <select id="testPlanReport">
+            <option>NONE</option>
+          <option>JSON</option>
+          <option>EXCEL</option>
+          <option>JSON & EXCEL</option>
+        </select>
+      </div>
+
+        <div class="form-group">
+        <label for="resultReport">Download Result Report</label>
+        <select id="resultReport">
+            <option>NONE</option>
+          <option>JSON</option>
+          <option>EXCEL</option>
+          <option>JSON & EXCEL</option>
+        </select>
+      </div>
+
+        <button id="start-test-btn" type="button" class="btn">Start Captain Fix Testing</button>
+    </form>
+  </div>
+</body>
+</html>
+
+
+<script>
+document.getElementById('start-test-btn').addEventListener('click', async () => {
+  // collect values
+  const url = document.getElementById('url').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const tool = document.getElementById('tool').value;
+  const depth = document.getElementById('depth').value;
+  const browser = document.getElementById('browser').value;
+  const testPlanReport = document.getElementById('testPlanReport').value;
+  const resultReport = document.getElementById('resultReport').value;
+
+  // build payload
+  const payload = {
+    url,
+    email,
+    tool,
+    depth,
+    browser,
+    testPlanReport,
+    resultReport,
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch('/start_test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      alert('Server error: ' + txt);
+      return;
+    }
+
+    const data = await res.json(); // expect JSON reply
+    // show user friendly message
+    alert(data.message || 'Test started');
+  } catch (err) {
+    console.error(err);
+    alert('Failed to start test: ' + err.message);
+  }
+});
+</script>
