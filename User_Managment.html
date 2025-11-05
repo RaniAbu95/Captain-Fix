@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>User Managment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    .container { max-width: 900px; margin: auto; }
+    form { padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 20px; }
+    label { display: block; margin-top: 8px; }
+    input, select { padding: 8px; width: 100%; box-sizing: border-box; margin-top: 4px; }
+    button { padding: 10px 14px; margin-top: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    .actions button { margin-right: 6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>User Management</h1>
+
+    <form id="user-form" action="#" method="post" data-test="create-user-form">
+      <h2>Create / Edit User</h2>
+      <label for="firstName">First name</label>
+      <input id="firstName" name="firstName" type="text" placeholder="Enter first name" required>
+
+      <label for="lastName">Last name</label>
+      <input id="lastName" name="lastName" type="text" placeholder="Enter last name">
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="user@example.com" required>
+
+      <label for="role">Role</label>
+      <select id="role" name="role">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+        <option value="viewer">Viewer</option>
+      </select>
+
+      <label>
+        <input id="active" name="active" type="checkbox" checked>
+        Active
+      </label>
+
+      <div style="margin-top:12px;">
+        <button id="saveBtn" type="button">Save User</button>
+        <button id="resetBtn" type="reset">Reset</button>
+      </div>
+    </form>
+
+    <div>
+      <h2>Existing Users</h2>
+      <table id="users-table" aria-label="users-table">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Active</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr data-user-id="1">
+            <td>1</td><td>Ahmed Ali</td><td>ahmed@example.com</td><td>Admin</td><td>Yes</td>
+            <td class="actions">
+              <button class="editBtn" data-action="edit">Edit</button>
+              <button class="deleteBtn" data-action="delete">Delete</button>
+            </td>
+          </tr>
+          <tr data-user-id="2">
+            <td>2</td><td>Leah Cohen</td><td>leah@example.com</td><td>User</td><td>No</td>
+            <td class="actions">
+              <button class="editBtn" data-action="edit">Edit</button>
+              <button class="deleteBtn" data-action="delete">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px;">
+      <h2>Bulk Actions</h2>
+      <label for="exportFormat">Export format</label>
+      <select id="exportFormat" name="exportFormat">
+        <option value="json">JSON</option>
+        <option value="excel">Excel</option>
+      </select>
+      <button id="exportBtn" type="button">Export</button>
+    </div>
+  </div>
+
+  <script>
+    // small client-side script to simulate interactions for Selenium tests
+    document.getElementById('saveBtn').addEventListener('click', function() {
+      const firstName = document.getElementById('firstName').value || '(empty)';
+      const email = document.getElementById('email').value || '(empty)';
+      alert('Saved: ' + firstName + ' / ' + email);
+    });
+
+    document.querySelectorAll('.deleteBtn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = btn.closest('tr');
+        row.parentNode.removeChild(row);
+      });
+    });
+
+    document.querySelectorAll('.editBtn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const row = btn.closest('tr');
+        document.getElementById('firstName').value = row.children[1].innerText.split(' ')[0];
+        document.getElementById('lastName').value = row.children[1].innerText.split(' ')[1] || '';
+        document.getElementById('email').value = row.children[2].innerText;
+        document.getElementById('role').value = row.children[3].innerText.toLowerCase();
+        document.getElementById('active').checked = row.children[4].innerText.toLowerCase().startsWith('y');
+        window.scrollTo(0,0);
+      });
+    });
+  </script>
+</body>
+</html>

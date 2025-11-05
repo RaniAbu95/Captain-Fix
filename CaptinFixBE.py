@@ -7,9 +7,22 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route('/')
+# Example additional page
+@app.route("/home")
+def home():
+    return render_template("index.html")
+
+
+@app.route("/")
 def index():
     return render_template('CaptainFixFE.html')
+
+
+@app.route("/api/data", methods=["POST"])
+def api_data():
+    data = request.json
+    return jsonify({"received": data})
+
 
 @app.route('/start_test', methods=['POST'])
 def start_test():

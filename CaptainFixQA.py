@@ -1,15 +1,10 @@
-import os
 import json
 import subprocess
 import sys
-from textwrap import indent
-from langchain_core.prompts import ChatPromptTemplate
-from dotenv import load_dotenv
 import pandas as pd
-from openpyxl.utils import get_column_letter
+import os
+from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 from langchain_openai import ChatOpenAI
 
 
@@ -26,40 +21,71 @@ else:
     print("[INFO] No config file passed. Using defaults.")
 
 
-def set_up():
-    load_dotenv()
-    url = CONFIG.get("url","file:///C:/Users/Ahmed/Downloads/User%20Managment(1).html")
+# def set_up():
+#     load_dotenv()
+#     url = CONFIG.get("url","file:///C:/Users/Ahmed/Downloads/User%20Managment(1).html")
+#
+#     driver = webdriver.Chrome()
+#     driver.get(url)
+#     llm = ChatOpenAI(
+#         model='gpt-3.5-turbo',
+#         temperature=0.1,
+#         max_tokens=3000,
+#         api_key= os.getenv("OPENAI_API_KEY")
+#     )
+#     return driver , llm
+#
+# def analyze_html_with_llm(html_content: str, llm):
+#     template = (
+#         "אני נותן לך דף HTML של דף אינטרנט {html}\n"
+#         "זהה את כל האלמנטים הפעילים בדף (קישוריים, כפתורים, טפסים, אם יש עוד) ותאר את הפעולות שניתן לבצע עליהם.\n"
+#         "החזר אך ורק JSON תקין בלבד (בלי טקסט נוסף). תמיין לפי סוג האלמנט (links, buttons, forms, inputs,other וכו')."
+#     )
+#
+#     prompt = ChatPromptTemplate.from_template(template)
+#     chain = prompt | llm
+#
+#     try:
+#         response = chain.invoke({"html": html_content})
+#     except Exception as e:
+#         raise RuntimeError(f"Failed to invoke chain: {e}")
+#
+#     if hasattr(response, "content"):
+#         raw_text = response.content
+#     else:
+#         raw_text = str(response)
+#     return raw_text
 
+
+
+def set_up():
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Example config (you might already have CONFIG defined elsewhere)
+
+    url = os.getenv("URL", "file:///Users/raniaburaia/Desktop/certificate/Captain-Fix/User_Managment.html")
+
+    # Set up Selenium Chrome driver
     driver = webdriver.Chrome()
     driver.get(url)
+
+    # Get API key from environment
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY not found. Please set it in your .env file.")
+
+    # Initialize the LLM
     llm = ChatOpenAI(
-        model='gpt-3.5-turbo',
+        model="gpt-3.5-turbo",
         temperature=0.1,
         max_tokens=3000,
-        api_key= os.getenv("OPENAI_API_KEY")
-    )
-    return driver , llm
-
-def analyze_html_with_llm(html_content: str, llm):
-    template = (
-        "אני נותן לך דף HTML של דף אינטרנט {html}\n"
-        "זהה את כל האלמנטים הפעילים בדף (קישוריים, כפתורים, טפסים, אם יש עוד) ותאר את הפעולות שניתן לבצע עליהם.\n"
-        "החזר אך ורק JSON תקין בלבד (בלי טקסט נוסף). תמיין לפי סוג האלמנט (links, buttons, forms, inputs,other וכו')."
+        api_key=api_key
     )
 
-    prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | llm
+    return driver, llm
 
-    try:
-        response = chain.invoke({"html": html_content})
-    except Exception as e:
-        raise RuntimeError(f"Failed to invoke chain: {e}")
 
-    if hasattr(response, "content"):
-        raw_text = response.content
-    else:
-        raw_text = str(response)
-    return raw_text
 
 # generate a test cases
 def generate_test_cases_by_llm(html_content:str , elements:str , llm):
@@ -239,7 +265,7 @@ def create_selenium_script(test_cases, html_content, llm):
     	- {html} will contain the full HTML content for the page. 
     	- {test_cases} will contain the test suites JSON. 
     9. Keep the code reasonably compact and readable (functions like run_step, run_case, run_suite are encouraged). 
-
+  
     """
 
     # Build the LangChain prompt and call the LLM chain
@@ -290,14 +316,59 @@ def exec_selenium_script(selenium_script: str, filename: str = "seleniumtest.py"
         print(f"[ERROR] Failed to execute {filename}: {e}")
         return -1
 
+import json
+from langchain_core.prompts import ChatPromptTemplate
+
+def analyze_html_with_llm(html_content, llm):
+    """
+    Analyzes an HTML page using an LLM to extract key UI elements.
+    Returns a Python list of elements with their attributes.
+    """
+
+    # Build a prompt for the model
+    prompt = ChatPromptTemplate.from_template("""
+    You are an expert QA engineer analyzing a webpage for automated testing.
+
+    Analyze the following HTML and extract **interactive elements**:
+    - forms
+    - buttons
+    - input fields (text, email, password, etc.)
+    - select dropdowns
+    - checkboxes and radio buttons
+    - links or anchors (<a>)
+
+    Return the result as a JSON list of objects, where each object includes:
+    - tag_name (e.g., input, button)
+    - attributes (e.g., id, name, type, placeholder, value)
+    - label or inner text (if available)
+    - xpath or CSS selector (if can be inferred)
+
+    HTML content:
+    {html_content}
+    """)
+
+    # Format the prompt
+    messages = prompt.format_messages(html_content=html_content)
+
+    # Send to the model
+    response = llm.invoke(messages)
+
+    # Try to parse JSON from the LLM response
+    try:
+        elements = json.loads(response.content)
+    except Exception as e:
+        print("⚠️ Could not parse LLM response as JSON:", e)
+        print("Raw response:", response.content)
+        elements = []
+
+    return elements
+
+
+
 def main():
     driver,llm = set_up()
-
     # Access config values anywhere:
-
     test_plan_report = CONFIG.get("testPlanReport","JSON")
-
-
 
     try:
         html_content = driver.page_source
