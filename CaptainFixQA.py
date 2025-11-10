@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import os
 import json
 import subprocess
@@ -17,6 +17,13 @@ from openpyxl import load_workbook
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
+import json
+import subprocess
+import sys
+from langchain_core.prompts import ChatPromptTemplate
+import pandas as pd
+from selenium import webdriver
+from langchain_openai import ChatOpenAI
 
 
 
@@ -315,21 +322,6 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
-=======
-import os
-import json
-import subprocess
-import sys
-from langchain_core.prompts import ChatPromptTemplate
-import pandas as pd
-from selenium import webdriver
-from langchain_openai import ChatOpenAI
-
-
-
-
 
 def analyze_html_with_llm(html_content,llm):
 
@@ -594,12 +586,12 @@ def main():
     else:
         url = "file:////Users/raniaburaia/Desktop/certificate/Captain-Fix/User_Managment.html"
 
-    ######hi mother fuckers####
+    ######hi mother fuckersss####
     llm = ChatOpenAI(
         model='gpt-3.5-turbo',
         temperature=0.1,
-        max_tokens=500,
-        open_api_key="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  ")
+        openai_api_key="sk-proj"
+                      "-VPmkHXLTER5f4vKSLD_RYhi9fr1XO_kFiAK_bL7QQTMVcFCBkxfkiW9OIqqvMkv7RJds_4JtBkT3BlbkFJncxJGz9kFE2kFOGgP9g1QZcZfi73LCgoPzc0kACXN7Fe2QpLMlqYryjbHhcHkw6pc7pqZxM7oA")
     driver = webdriver.Chrome()
     # Access config values anywhere:
     driver.get(url)
@@ -623,6 +615,6 @@ def main():
     #
 
 
-if __name__ == "__main__":
-    main()
->>>>>>> origin/main
+
+main()
+
