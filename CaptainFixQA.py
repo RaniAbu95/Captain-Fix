@@ -599,7 +599,7 @@ def main():
         model='gpt-3.5-turbo',
         temperature=0.1,
         max_tokens=500,
-        open_api_key="sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+        open_api_key="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  ")
     driver = webdriver.Chrome()
     # Access config values anywhere:
     driver.get(url)
