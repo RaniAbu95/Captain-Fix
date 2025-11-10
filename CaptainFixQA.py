@@ -329,19 +329,6 @@ from langchain_openai import ChatOpenAI
 
 
 
-# --- Load config if passed as first arg
-CONFIG = {}
-if len(sys.argv) > 1:
-    config_path = sys.argv[1]
-    try:
-        with open(config_path, "r", encoding="utf-8") as f:
-            CONFIG = json.load(f)
-    except Exception as e:
-        print(f"[WARN] Could not read config file {config_path}: {e}")
-else:
-    print("[INFO] No config file passed. Using defaults.")
-
-
 
 
 def analyze_html_with_llm(html_content,llm):
@@ -598,21 +585,24 @@ def exec_selenium_script(selenium_script: str, filename: str = "seleniumtest.py"
         return -1
 
 
-def set_up():
+def main():
+    # --- Load config if passed as first arg
+
+    if len(sys.argv) > 1:
+        url = sys.argv[1]
+
+    else:
+        url = "file:////Users/raniaburaia/Desktop/certificate/Captain-Fix/User_Managment.html"
+
+    ######hi mother fuckers####
     llm = ChatOpenAI(
         model='gpt-3.5-turbo',
         temperature=0.1,
-        max_tokens = 500,
+        max_tokens=500,
         open_api_key="sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
     driver = webdriver.Chrome()
-    return driver , llm
-
-
-def main():
-    ######hi mother fuckers####
-    driver,llm = set_up()
     # Access config values anywhere:
-    driver.get('file:////Users/raniaburaia/Desktop/certificate/Captain-Fix/User_Managment.html')
+    driver.get(url)
     html_content = driver.page_source
     elements = analyze_html_with_llm(html_content,llm)
     print(elements)
