@@ -1,22 +1,7 @@
 
-import os
-import json
-import subprocess
-import sys
-from langchain_core.output_parsers import StrOutputParser
-from textwrap import indent
-from langchain_core.prompts import ChatPromptTemplate
-from dotenv import load_dotenv
-import pandas as pd
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-from langchain_openai import ChatOpenAI
 from openpyxl import load_workbook
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
-
 import json
 import subprocess
 import sys
@@ -25,19 +10,6 @@ import pandas as pd
 from selenium import webdriver
 from langchain_openai import ChatOpenAI
 
-
-
-def set_up():
-    #load_dotenv()
-    driver = webdriver.Chrome()
-    llm = ChatOpenAI(
-        model='gpt-3.5-turbo',
-        temperature=0.1,
-        openai_api_key= "***"
-    )
-
-
-    return driver, llm
 
 def analyze_html_with_llm(html_content,llm):
 
