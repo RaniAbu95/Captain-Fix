@@ -491,12 +491,15 @@ def main():
     else:
         url = "file:////Users/raniaburaia/Desktop/certificate/Captain-Fix/User_Managment.html"
 
-    ######hi mother fuckersss####
+
+
+
+
     llm = ChatOpenAI(
         model='gpt-3.5-turbo',
         temperature=0.1,
-        openai_api_key="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")
-
+        openai_api_key="sk-proj"
+                      "-VPmkHXLTER5f4vKSLD_RYhi9fr1XO_kFiAK_bL7QQTMVcFCBkxfkiW9OIqqvMkv7RJds_4JtBkT3BlbkFJncxJGz9kFE2kFOGgP9g1QZcZfi73LCgoPzc0kACXN7Fe2QpLMlqYryjbHhcHkw6pc7pqZxM7oA")
     driver = webdriver.Chrome()
     # Access config values anywhere:
     driver.get(url)
