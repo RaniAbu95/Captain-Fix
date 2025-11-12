@@ -483,7 +483,7 @@ def exec_selenium_script(selenium_script: str, filename: str = "seleniumtest.py"
 
 
 def main():
-    # --- Load config if passed as first arg
+
 
     if len(sys.argv) > 1:
         url = sys.argv[1]
