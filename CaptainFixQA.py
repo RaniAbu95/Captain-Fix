@@ -491,7 +491,7 @@ def main():
     llm = ChatOpenAI(
         model='gpt-3.5-turbo',
         temperature=0.1,
-        #openai_api_key="sk-proj*********************************"
+        openai_api_key="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"
     )
     driver = webdriver.Chrome()
     # Access config values anywhere:
@@ -517,6 +517,6 @@ def main():
     #
 
 
-
-main()
+if __name__ == "__main__":
+    main()
 
