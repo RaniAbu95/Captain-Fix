@@ -500,10 +500,10 @@ def main():
     html_content = driver.page_source
     elements = analyze_html_with_llm(html_content,llm)
     print(elements)
-    #test_plan_report = CONFIG.get("testPlanReport", "JSON")
-    #test_cases = generate_test_cases_by_llm(html_content, elements, llm)
     driver.quit()
 
+    #test_plan_report = CONFIG.get("testPlanReport", "JSON")
+    #test_cases = generate_test_cases_by_llm(html_content, elements, llm)
     # # If user requested JSON report, write it
     # if test_plan_report and ("JSON" in test_plan_report or "JSON" in (test_plan_report.upper())):
     #     export_testplan_json_file("PlanJson.json", test_cases)
@@ -513,8 +513,6 @@ def main():
     # # generate a selenium script to check the web using test_cases file and exec the file
     # selenium_script = create_selenium_script(test_cases,html_content, llm)
     # exec_selenium_script(selenium_script)
-    #
-    #
 
 
 if __name__ == "__main__":
