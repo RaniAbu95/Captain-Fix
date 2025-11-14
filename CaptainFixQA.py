@@ -411,7 +411,7 @@ def exec_selenium_script(selenium_script: str, filename: str = "seleniumtest.py"
         print(f"[ERROR] Failed to execute {filename}: {e}")
         return -1
 
-
+############### stabel version #######################
 def main():
 #
 
@@ -440,6 +440,7 @@ def main():
     except Exception as e:
         print(f"An error occurred during the test: {e}")
     driver.quit()
+
     #html_content = driver.page_source
     #elements = analyze_html_with_llm(html_content,llm)
     #print(elements)
