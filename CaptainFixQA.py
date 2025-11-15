@@ -419,7 +419,7 @@ def main():
         url = sys.argv[1]
 
     else:
-        url = "file:////Users/raniaburaia/Desktop/certificate/Captain-Fix/Search engine.html"
+        url = "file:///Users/raniaburaia/Desktop/certificate/Captain-Fix/Search engine.html"
         llm = ChatOpenAI(
         model='gpt-3.5-turbo',
         temperature=0.1,
@@ -427,7 +427,7 @@ def main():
     )
 
     driver = webdriver.Chrome()
-    driver.get("file:////Users/raniaburaia/Desktop/certificate/Captain-Fix/Search engine.html")
+    driver.get("file:///Users/raniaburaia/Desktop/certificate/Captain-Fix/Search engine.html")
     driver.maximize_window()
 
     try:
