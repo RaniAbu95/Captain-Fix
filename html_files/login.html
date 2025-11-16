@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>התחברות למערכת</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+        .toggle {
+            margin-top: 10px;
+            cursor: pointer;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-container">
+        <h2>התחברות</h2>
+        <input type="text" id="login-username" placeholder="שם משתמש" required>
+        <input type="password" id="login-password" placeholder="סיסמה" required>
+        <button class="btn" onclick="login()">התחבר</button>
+        <p class="toggle" onclick="toggleForm()">אין לך חשבון? הירשם כאן</p>
+    </div>
+    
+    <div class="container" id="register-container" style="display: none;">
+        <h2>הרשמה</h2>
+        <input type="text" id="register-username" placeholder="שם משתמש" required>
+        <input type="password" id="register-password" placeholder="סיסמה" required>
+        <button class="btn" onclick="register()">הרשמה</button>
+        <p class="toggle" onclick="toggleForm()">כבר יש לך חשבון? התחבר כאן</p>
+    </div>
+    
+    <script>
+        function toggleForm() {
+            document.getElementById('login-container').style.display = 
+                document.getElementById('login-container').style.display === 'none' ? 'block' : 'none';
+            document.getElementById('register-container').style.display = 
+                document.getElementById('register-container').style.display === 'none' ? 'block' : 'none';
+        }
+
+        function register() {
+            let username = document.getElementById('register-username').value;
+            let password = document.getElementById('register-password').value;
+            
+            if (localStorage.getItem(username)) {
+                alert('שם המשתמש כבר קיים!');
+                return;
+            }
+            localStorage.setItem(username, password);
+            alert('הרשמה בוצעה בהצלחה! כעת ניתן להתחבר');
+            toggleForm();
+        }
+
+        function login() {
+            let username = document.getElementById('login-username').value;
+            let password = document.getElementById('login-password').value;
+            
+            if (localStorage.getItem(username) === password) {
+                alert('התחברות הצליחה!');
+            } else {
+                alert('שם משתמש או סיסמה שגויים!');
+            }
+        }
+    </script>
+</body>
+</html>

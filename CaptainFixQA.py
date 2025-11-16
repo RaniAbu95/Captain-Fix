@@ -427,7 +427,7 @@ def main():
     )
 
     driver = webdriver.Chrome()
-    driver.get("file:///Users/raniaburaia/Desktop/certificate/Captain-Fix/Search engine.html")
+    driver.get("file:///Users/raniaburaia/Desktop/certificate/Captain-Fix/html_files/Search engine.html")
     driver.maximize_window()
 
     try:
@@ -441,9 +441,9 @@ def main():
         print(f"An error occurred during the test: {e}")
     driver.quit()
 
-    #html_content = driver.page_source
-    #elements = analyze_html_with_llm(html_content,llm)
-    #print(elements)
+    # html_content = driver.page_source
+    # elements = analyze_html_with_llm(html_content,llm)
+    # print(elements)
     #test_plan_report = CONFIG.get("testPlanReport", "JSON")
     #test_cases = generate_test_cases_by_llm(html_content, elements, llm)
 
@@ -461,5 +461,5 @@ def main():
     #
 
 
-
-main()
+if __name__ == "__main__":
+    main()
