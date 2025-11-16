@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchMaster - מנוע חיפוש</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .main-container {
+            margin-top: 100px;
+        }
+        #search-bar {
+            width: 50%;
+            padding: 10px;
+            font-size: 18px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .search-button:hover {
+            background-color: #45a049;
+        }
+        .unique-draggable-table {
+            margin: 50px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        .unique-draggable-table th, .unique-draggable-table td {
+            padding: 10px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        .item-1, .item-2, .item-3 {
+            cursor: move;
+            background-color: #f2f2f2;
+        }
+        .dropzone-area {
+            height: 100px;
+            border: 2px dashed #333;
+            margin-top: 20px;
+            padding: 10px;
+            color: #777;
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 2px solid #4CAF50;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        #popup button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <h1>SearchMaster</h1>
+    <input type="text" id="search-bar" placeholder="חפש משהו..."><br>
+    <button class="search-button" id="search-btn" onclick="search()">חפש</button>
+    <button class="search-button" onclick="openPopup()">פתח חלון קופץ</button>
+</div>
+
+<div id="popup">
+    <h3>זהו חלון קופץ!</h3>
+    <p>זהו תיאור לחלון קופץ לבדיקות אוטומטיות.</p>
+    <button class="search-button" onclick="closePopup()">סגור</button>
+</div>
+
+<h2>גרור ושחרר טבלה</h2>
+<table class="unique-draggable-table">
+    <thead>
+        <tr>
+            <th>מספר</th>
+            <th>פריט לגרירה</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="item-1" draggable="true" ondragstart="drag(event)">
+            <td>1</td>
+            <td>פריט 1</td>
+        </tr>
+        <tr class="item-2" draggable="true" ondragstart="drag(event)">
+            <td>2</td>
+            <td>פריט 2</td>
+        </tr>
+        <tr class="item-3" draggable="true" ondragstart="drag(event)">
+            <td>3</td>
+            <td>פריט 3</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="dropzone-area" ondrop="drop(event)" ondragover="allowDrop(event)">
+    שחרר את הפריטים כאן
+</div>
+
+<script>
+    function search() {
+        const query = document.getElementById("search-bar").value;
+        if (query.trim() === "") {
+            alert("לא ניתן לבצע חיפוש ללא הזנת טקסט!");
+        } else {
+            alert("אתה מחפש: " + query);
+        }
+    }
+
+    function openPopup() {
+        document.getElementById("popup").style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById("popup").style.display = 'none';
+    }
+
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.innerHTML);
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text");
+        event.target.innerHTML += '<div>' + data + '</div>';
+    }
+</script>
+
+</body>
+</html>
