@@ -43,7 +43,7 @@ print(llm_suggestions)
 confirm = input("\nרוצה לבצע את הפעולות? (y/n): ")
 
 if confirm.lower() == "y":
-    print("\nמייצר קוד אוטומציה...\n")
+    print("\nמייצר קוד אוטומציה....\n")
 
 
     response = Ai_agent.chat.completions.create (
