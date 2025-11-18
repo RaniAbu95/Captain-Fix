@@ -1,61 +1,68 @@
 from openai import OpenAI
-# ---- הגדרות OpenAI ----
-Ai_agent = OpenAI(api_key="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")
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+# ---- הגדרת OpenAI ----
+Ai_agent = OpenAI(api_key="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")
 
 def analyze_html_with_llm(html):
     prompt = f"""
     אני נותן לך קוד HTML של דף אינטרנט:
     {html}
 
-    זהה את האלמנטים הפעילים (כפתורים, קישורים, טפסים) ותאר את הפעולות האפשריות שניתן לבצע עליהם.
-    החזר את זה כרשימה ברורה, ממוינת לפי סוג האלמנט.
+    זהה את האלמנטים הפעילים (כפתורים, קישורים, טפסים)
+    ותאר את הפעולות האפשריות שניתן לבצע עליהם.
+    החזר רשימה מסודרת לפי סוג האלמנט.
     """
+
     response = Ai_agent.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4.1-mini",
         messages=[
             {"role": "system", "content": "אתה עוזר לאוטומציה עם Selenium."},
             {"role": "user", "content": prompt}
         ],
         max_tokens=500
     )
+
     return response.choices[0].message.content
-# אתחול סליניום
+
+
+# ---- Selenium ----
 driver = webdriver.Chrome()
-driver.get('file:///Users/raniaburaia/PycharmProjects/Captain-Fix/ActionChainsEx.Html')
+driver.get("file:///Users/raniaburaia/PycharmProjects/Captain-Fix/ActionChainsEx.Html")
 driver.maximize_window()
-# קבלת HTML ושליחה ל LLM
+
 page_source = driver.page_source
 llm_suggestions = analyze_html_with_llm(page_source)
+
 driver.quit()
-#הצגת הפעולות
-print('ה LLM מציע את הפעולות הבאות\n')
+
+print("\nה-LLM מציע את הפעולות הבאות:\n")
 print(llm_suggestions)
 
-confirm = input("\n רוצה לבצע את הפעולות הבאות ? (y/n): ")
-if confirm== "y":
-    print("\n מבצע אוטומצייה על האלמנטים")
-    # בקשה מ LLM לכתוב סקריפט מלא בסלניום לביצוע הפעולות
-    response =Ai_agent.chat.completions.create(
-    model ='gpt-4o-mini',
-    messages=[
-        {"role":"system", "content": "you are an experinced  qa engineer, required to write a test webpage with selenium"},
-        {"role":"system","content":"the response should be a valid python script that will run in selenium,without any explanations or markdown formmating"},
-        {"role":"system","content":"use this url:\"file:///C:/Users/ssssa/Desktop/QA%202024/Exercises/%D7%AA%D7%A8%D7%92%D7%99%D7%9C%20Action%20Chains/ActionChainsEx.Html"},
-        {"role":"system","content":"the script should be able to handle the following actions:"+llm_suggestions},
-        {"role": "system",
-         "content": "example: for locating elements use this command <driver.find_element(By.ID, \"{value from source code}\")>"},
-        {"role":"system","content":" for assertions look for the message box locator value in source code and print the message text "},
-        {'role': 'user', 'content': f"please provide a valid python script,please maximize the size od driver window "}
-        ],max_tokens=500
-    )
-    # הקוד שחזר מ LLM
-    script_code = response.choices[0].message.content
-    print("\n הקוד שנוצר הוא")
-    print(script_code)
-    #  הרצת הקוד
-    exec(script_code)
-else:
-    print("\n ביצוע הפעולות בוטל")
+confirm = input("\nרוצה לבצע את הפעולות? (y/n): ")
 
-#
+if confirm.lower() == "y":
+    print("\nמייצר קוד אוטומציה...\n")
+
+    response = Ai_agent.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {"role": "system", "content": "You are an experienced QA engineer writing Selenium Python automation."},
+            {"role": "system", "content": "Return ONLY raw Python code. No explanations. No markdown."},
+            {"role": "system", "content": "Use the URL: 'file:///Users/raniaburaia/PycharmProjects/Captain-Fix/ActionChainsEx.Html'"},
+            {"role": "system", "content": "Handle the following actions: " + llm_suggestions},
+            {"role": "user", "content": "Produce a Python Selenium script and maximize the window."}
+        ],
+        max_tokens=600
+    )
+
+    script_code = response.choices[0].message.content
+
+    print("\nהקוד שנוצר:\n")
+    print(script_code)
+
+    exec(script_code)
+
+else:
+    print("\nביצוע הפעולות בוטל.")
