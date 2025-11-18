@@ -45,7 +45,8 @@ confirm = input("\nרוצה לבצע את הפעולות? (y/n): ")
 if confirm.lower() == "y":
     print("\nמייצר קוד אוטומציה...\n")
 
-    response = Ai_agent.chat.completions.create(
+
+    response = Ai_agent.chat.completions.create (
         model="gpt-4.1-mini",
         messages=[
             {"role": "system", "content": "You are an experienced QA engineer writing Selenium Python automation."},
