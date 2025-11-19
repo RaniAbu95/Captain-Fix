@@ -29,6 +29,7 @@ def analyze_html_with_llm(html):
 
 # ---- Selenium ----
 driver = webdriver.Chrome()
+# the path of the file
 driver.get("file:///Users/raniaburaia/PycharmProjects/Captain-Fix/ActionChainsEx.Html")
 driver.maximize_window()
 
