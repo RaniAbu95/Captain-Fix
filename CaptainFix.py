@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 # ---- הגדרת OpenAI ----
-Ai_agent = OpenAI(api_key="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")
+Ai_agent = OpenAI(api_key="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")
 
 def analyze_html_with_llm(html):
     prompt = f"""
@@ -51,11 +51,12 @@ if confirm.lower() == "y":
         messages=[
             {"role": "system", "content": "You are an experienced QA engineer writing Selenium Python automation."},
             {"role": "system", "content": "Return ONLY raw Python code. No explanations. No markdown."},
-            {"role": "system", "content": "Use the URL: 'file:///Users/raniaburaia/PycharmProjects/Captain-Fix/ActionChainsEx.Html'"},
+            {"role": "system", "content": "the operation system is macOS."},
+            {"role": "system", "content": "Use the URL: file:///Users/raniaburaia/PycharmProjects/Captain-Fix/ActionChainsEx.Html"},
             {"role": "system", "content": "Handle the following actions: " + llm_suggestions},
             {"role": "user", "content": "Produce a Python Selenium script and maximize the window."}
         ],
-        max_tokens=600
+        max_tokens=500
     )
 
     script_code = response.choices[0].message.content
